@@ -54,8 +54,12 @@ public class LinkShortenerController {
                     mapDb.save(tx, urlShortened, redirectLink);
                     log.info("RocksApi.save");
 
+                    LinkShortenForm response = new LinkShortenForm();
+                    response.link = urlShortened;
+                    String responseJsonStr = mapper.writeValueAsString(response);
+
                     tx.commit();
-                    return new ResponseEntity<>(urlShortened.getBytes(), HttpStatus.CREATED);
+                    return new ResponseEntity<>(responseJsonStr.getBytes(), HttpStatus.CREATED);
                 }
             }
         } catch (Exception e) {
