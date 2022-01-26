@@ -1,0 +1,45 @@
+@inherits LayoutComponentBase
+
+@inject NavigationManager _navigationManager
+
+<MudThemeProvider Theme="MyCustomTheme"/>
+<MudSnackbarProvider/>
+<MudDialogProvider/>
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudText Typo="Typo.h5" Class="ml-3">
+            <MudIcon Size="Size.Large" Icon="@Icons.Material.Filled.LocalMovies"/>
+            Linklo
+        </MudText>
+        <MudAppBarSpacer/>
+        <MudText Align="Align.Right" Typo="Typo.h6" Class="ml-3">
+           <MudIconButton @onclick="NavigateToGitHub" Class="shadow-effect" Icon="@Icons.Custom.Brands.GitHub" Color="Color.Secondary" aria-label="github"></MudIconButton>
+        </MudText>
+    </MudAppBar>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code{
+    MudTheme MyCustomTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Primary = Colors.Blue.Default,
+            Secondary = Colors.Green.Accent4,
+            AppbarBackground = Colors.Blue.Default,
+        },
+
+        LayoutProperties = new LayoutProperties()
+        {
+            DrawerWidthLeft = "260px",
+            DrawerWidthRight = "300px"
+        }
+    };
+
+    public void NavigateToGitHub() {
+        _navigationManager.NavigateTo("https://github.com/FreddyJilson/linklo");
+    }
+}

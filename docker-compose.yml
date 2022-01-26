@@ -1,0 +1,33 @@
+version: '3'
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+
+services:
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "9000:80"
+    depends_on:
+      - api
+    restart: always
+    networks:
+      static-network:
+       ipv4_address: 172.22.128.1
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    ports:
+      - "9001:8080"
+    restart: always
+    networks:
+      static-network:
+       ipv4_address: 172.22.128.2
