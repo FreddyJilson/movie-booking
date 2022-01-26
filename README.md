@@ -1,4 +1,4 @@
-# Linklo
+# Linklo (:warning: WIP)
 
 Linklo is a free url link shorten service built using SpringBoot Java API and C# Blazor Web Assembly.
 
