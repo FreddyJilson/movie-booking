@@ -1,2 +1,39 @@
 @page "/"
 
+@inject NavigationManager _navigationManager
+@inject IHttpClientFactory _client;
+@inject IDialogService DialogService
+
+<MudContainer Class="mt-16" MaxWidth="MaxWidth.Medium">
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true"></MudText>
+    <MudGrid Spacing="6" Class="mt-16">
+        <MudItem xs="12">
+            <MudText Typo="Typo.h5" Class="d-flex justify-center" GutterBottom="true">Welcome to Linklo!</MudText>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="Email" Label="Enter URL link to shorten" Variant="Variant.Outlined"/>
+                </MudItem>
+                <MudItem xs="12" Class="d-flex justify-center">
+                    @if (!InProgress) {
+                        <MudButton Style="width: 200px; margin: 2px;" OnClick="Login" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8">Login</MudButton>
+                    }
+                    else {
+                        <MudProgressCircular Size="Size.Large" Color="Color.Primary" Indeterminate="true"/>
+                    }
+                </MudItem>
+            </MudGrid>
+
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private string Email { get; set; }
+    private bool InProgress { get; set; } = false;
+
+
+    public async void Login() {
+        
+    }
+    
+}
