@@ -1,4 +1,5 @@
 @page "/"
+@using ui.Components
 
 @inject NavigationManager _navigationManager
 @inject IHttpClientFactory _client;
@@ -8,14 +9,15 @@
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true"></MudText>
     <MudGrid Spacing="6" Class="mt-16">
         <MudItem xs="12">
-            <MudText Typo="Typo.h5" Class="d-flex justify-center" GutterBottom="true">Welcome to Linklo!</MudText>
+            <MudText Typo="Typo.h4" Class="d-flex justify-center" GutterBottom="true">Welcome to Linklo!</MudText>
+            <MudText Typo="Typo.h5" Class="d-flex justify-center" GutterBottom="true">Linklo is a url link shorten service.</MudText>
             <MudGrid>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="Email" Label="Enter URL link to shorten" Variant="Variant.Outlined"/>
+                    <MudTextField @bind-Value="UrlLink" Label="Enter URL link to shorten" Variant="Variant.Outlined"/>
                 </MudItem>
                 <MudItem xs="12" Class="d-flex justify-center">
                     @if (!InProgress) {
-                        <MudButton Style="width: 200px; margin: 2px;" OnClick="Login" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8">Login</MudButton>
+                        <MudButton Style="width: 200px; margin: 2px;" OnClick="UrlShorten" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8">Shorten</MudButton>
                     }
                     else {
                         <MudProgressCircular Size="Size.Large" Color="Color.Primary" Indeterminate="true"/>
@@ -28,12 +30,12 @@
 </MudContainer>
 
 @code {
-    private string Email { get; set; }
+    private string UrlLink { get; set; }
     private bool InProgress { get; set; } = false;
+    DialogOptions maxWidth = new DialogOptions() {MaxWidth = MaxWidth.Medium, FullWidth = true};
 
-
-    public async void Login() {
-        
+    public async void UrlShorten() {
+        DialogService.Show<UrlShortenedDialog>("Shortened URL link", maxWidth);
     }
     
 }

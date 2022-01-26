@@ -1,0 +1,26 @@
+@inject IHttpClientFactory _client;
+@inject NavigationManager _navigationManager;
+@inject ISnackbar Snackbar;
+
+<MudDialog>
+    <DialogContent>
+        Your shortened shareable URL link is ready! Please save this somewhere to share the url.
+        <br/>
+        <b>@_navigationManager.Uri</b>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Ok">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code{
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    public string Email { get; set; }
+    public string Password { get; set; }
+
+   void Ok() => MudDialog.Cancel();
+
+}
