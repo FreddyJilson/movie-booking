@@ -2,7 +2,7 @@
 
 Linklo is a free url link shorten service built using SpringBoot Java API and C# Blazor Web Assembly.
 
-# Why use Linklo?
+## Why use Linklo?
 
 There is many advantages of using a url link shorten service. The benefits are:
 * Shorten a long url link making it neat to share with others.
@@ -22,7 +22,7 @@ In browser, go to `localhost:9000` to see the UI of the running application whic
 ## Demo
 :warning: WIP
 
-# Thanks
+## Thanks
 A special thanks to [Jetbrains](https://www.jetbrains.com/) and [Padang & Co](https://www.padang.co/) for offering free Jetbrains 1 year all pack IDE licenses.
 
 
