@@ -4,7 +4,7 @@ Linklo is a free url link shorten service built using SpringBoot Java API and C#
 
 ## Why use Linklo?
 
-There is many advantages of using a url link shorten service. The benefits are:
+There are many advantages of using a url link shorten service. The benefits are:
 * Shorten a long url link making it neat to share with others.
 * Share multiple shortened unique links for the same url link.
 * Privacy from internet users, search engines, web crawler etc while sharing the links on internet.
