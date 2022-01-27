@@ -20,7 +20,7 @@ docker-compose up -d
 In browser, go to `localhost:9000` to see the UI of the running application which interacts with the Java SpringBoot Api running in `localhost:9001`.
 
 ## Demo
-
+https://linklo.net/
 
 ## Thanks
 A special thanks to [Jetbrains](https://www.jetbrains.com/) and [Padang & Co](https://www.padang.co/) for offering free Jetbrains 1 year all pack IDE licenses.
