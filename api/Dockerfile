@@ -12,4 +12,4 @@ RUN ./mvnw install
 
 # Expose port 8080 for the API
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app/target/backend.jar"]
+ENTRYPOINT ["java", "-jar", "/app/target/api.jar"]

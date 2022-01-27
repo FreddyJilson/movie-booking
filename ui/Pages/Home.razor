@@ -1,9 +1,14 @@
 @page "/"
-@using ui.Components
 
-@inject NavigationManager _navigationManager
+@using ui.Components
+@using ui.Models
+@using System.Text
+@using System.Net
+
+@inject NavigationManager _navigationManager;
 @inject IHttpClientFactory _client;
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 <MudContainer Class="mt-16" MaxWidth="MaxWidth.Medium">
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true"></MudText>
@@ -32,10 +37,28 @@
 @code {
     private string UrlLink { get; set; }
     private bool InProgress { get; set; } = false;
-    DialogOptions maxWidth = new DialogOptions() {MaxWidth = MaxWidth.Medium, FullWidth = true};
+    DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
     public async void UrlShorten() {
-        DialogService.Show<UrlShortenedDialog>("Shortened URL link", maxWidth);
+        InProgress = true;
+        var client = _client.CreateClient();
+        var form = new FormLinkShorten(UrlLink);
+        var formAsJson = JsonConvert.SerializeObject(form);
+        var response = await client.PostAsync(Route.BaseUrl + Route.ApiV1Route + Route.ShortenLinkRoute,
+            new StringContent(formAsJson, Encoding.UTF8,
+                Common.JsonMediaType));
+
+        if (response.StatusCode == HttpStatusCode.Created) {
+            var shortenedLink = response.Content.ReadFromJsonAsync<FormLinkShorten>();
+            var parameters = new DialogParameters();
+            parameters.Add("UrlLink", shortenedLink.Result.link);
+            DialogService.Show<UrlShortenedDialog>("Shortened URL link. " +
+                                                   "Your shortened shareable URL link is ready! " +
+                                                   "Please save this somewhere and share it with others.", parameters, maxWidth);
+        }
+        else {
+            Snackbar.Add("The link could not be shortened!", Severity.Error);
+        }
     }
-    
+
 }

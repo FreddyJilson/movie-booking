@@ -1,6 +1,46 @@
-@page "/Redirect"
-<h3>Redirect</h3>
+@page "/{Link}"
+@using ui.Components
+@using ui.Models
+@using System.Text
+@using System.Net
+
+@inject NavigationManager _navigationManager;
+@inject IHttpClientFactory _client;
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 @code {
-    
+
+    [Parameter]
+    public String Link { get; set; }
+    DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+    protected override void OnInitialized()
+    {
+        if (Link.Equals("")) {
+            _navigationManager.NavigateTo("/", true);
+        }
+        
+        else if (!Link.Equals("")) {
+            RedirectToUrl();
+        }
+    }
+
+    public async void RedirectToUrl() {
+        var client = _client.CreateClient();
+        var form = new FormLinkShorten(Link);
+        var formAsJson = JsonConvert.SerializeObject(form);
+        var response = await client.PostAsync(Route.BaseUrl + Route.ApiV1Route + Route.RedirectUrlRoute,
+            new StringContent(formAsJson, Encoding.UTF8,
+                Common.JsonMediaType));
+
+        if (response.StatusCode == HttpStatusCode.OK) {
+            var shortenedLink = response.Content.ReadFromJsonAsync<FormLinkShorten>();
+            _navigationManager.NavigateTo(shortenedLink.Result.link, true);
+        }
+        else {
+            _navigationManager.NavigateTo("/", true);
+        }
+    }
+
 }

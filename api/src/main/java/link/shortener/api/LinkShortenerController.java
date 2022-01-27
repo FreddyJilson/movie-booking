@@ -1,10 +1,7 @@
 package link.shortener.api;
 
-import java.util.NavigableSet;
-
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import link.shortener.util.UrlShorten;
 import org.mapdb.DB;
@@ -70,7 +67,7 @@ public class LinkShortenerController {
         }
     }
 
-    @GetMapping(value = "/redirect-url", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/redirect-url", consumes = "application/json", produces = "application/json")
     public ResponseEntity<byte[]> redirectUrlLink(@RequestBody String linkShortenForm) {
         log.info("RocksApi.find");
 

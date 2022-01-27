@@ -1,13 +1,17 @@
+@using System.ComponentModel
 @inject IHttpClientFactory _client;
 @inject NavigationManager _navigationManager;
 @inject ISnackbar Snackbar;
 
 <MudDialog>
     <DialogContent>
-        Your shortened shareable URL link is ready! Please save this somewhere to share the url.
-        <br/>
-        <b>@_navigationManager.Uri</b>
+        <MudField Label="" Variant="Variant.Filled" Adornment="Adornment.End"
+                  AdornmentIcon="@Icons.Material.Outlined.CheckCircle" AdornmentColor="Color.Success">
+           @_navigationManager.Uri@UrlLink
+        </MudField>
+        Select the full text and Ctrl + C to copy the link and paste it in a browser.
     </DialogContent>
+    
     <DialogActions>
         <MudButton OnClick="Ok">Ok</MudButton>
     </DialogActions>
@@ -18,9 +22,12 @@
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
 
-    public string Email { get; set; }
-    public string Password { get; set; }
-
-   void Ok() => MudDialog.Cancel();
+    [Parameter]
+    public string UrlLink { get; set; }
+    
+    void Ok() {
+        MudDialog.Cancel();
+        _navigationManager.NavigateTo("/", true);
+    }
 
 }
