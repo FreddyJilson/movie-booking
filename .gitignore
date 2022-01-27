@@ -7,8 +7,8 @@ target/
 !**/src/test/**/target/
 
 # Db
-backend/file.db
-backend/file.db.wal.0
+api/file.db
+api/file.db.wal.0
 
 ### STS ###
 .apt_generated
