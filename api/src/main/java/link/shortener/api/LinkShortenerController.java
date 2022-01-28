@@ -43,6 +43,8 @@ public class LinkShortenerController {
         }
 
         if (form.getLink().equals("")) {
+            tx.rollback();
+
             return new ResponseEntity<>("Url link not send".getBytes(), HttpStatus.BAD_REQUEST);
         }
 
@@ -53,7 +55,7 @@ public class LinkShortenerController {
                 String redirectUrlCheckStr = mapDb.find(tx, urlShortened);
                 if (redirectUrlCheckStr == "" || redirectUrlCheckStr == null) {
                     mapDb.save(tx, urlShortened, redirectLink);
-                    log.info("RocksApi.save");
+                    log.info("MabsDbApi.save");
 
                     LinkShortenForm response = new LinkShortenForm();
                     response.link = urlShortened;
@@ -73,7 +75,7 @@ public class LinkShortenerController {
 
     @PostMapping(value = "/redirect-url", consumes = "application/json", produces = "application/json")
     public ResponseEntity<byte[]> redirectUrlLink(@RequestBody String linkShortenForm) {
-        log.info("RocksApi.find");
+        log.info("MabsDbApi.find");
 
         DB tx = mapDb.beginTransaction();
 
