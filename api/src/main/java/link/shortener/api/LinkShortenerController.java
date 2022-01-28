@@ -42,6 +42,10 @@ public class LinkShortenerController {
             return new ResponseEntity<>("Could not process the request body form".getBytes(), HttpStatus.BAD_REQUEST);
         }
 
+        if (form.getLink().equals("")) {
+            return new ResponseEntity<>("Url link not send".getBytes(), HttpStatus.BAD_REQUEST);
+        }
+
         try {
             while (true) {
                 String redirectLink = form.getLink();

@@ -37,28 +37,32 @@
 @code {
     private string UrlLink { get; set; }
     private bool InProgress { get; set; } = false;
-    DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+    DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
 
     public async void UrlShorten() {
-        InProgress = true;
-        var client = _client.CreateClient();
-        var form = new FormLinkShorten(UrlLink);
-        var formAsJson = JsonConvert.SerializeObject(form);
-        var response = await client.PostAsync(Route.BaseUrl + Route.ApiV1Route + Route.ShortenLinkRoute,
-            new StringContent(formAsJson, Encoding.UTF8,
-                Common.JsonMediaType));
-
-        if (response.StatusCode == HttpStatusCode.Created) {
-            var shortenedLink = response.Content.ReadFromJsonAsync<FormLinkShorten>();
-            var parameters = new DialogParameters();
-            parameters.Add("UrlLink", shortenedLink.Result.link);
-            DialogService.Show<UrlShortenedDialog>("Shortened URL link. " +
-                                                   "Your shortened shareable URL link is ready! " +
-                                                   "Please save this somewhere and share it with others.", parameters, maxWidth);
+        if (UrlLink is "" or null) {
+            Snackbar.Add("Please enter a URL link to shorten!", Severity.Error); 
+            InProgress = false;
         }
         else {
-            Snackbar.Add("The link could not be shortened!", Severity.Error);
+            InProgress = true;
+            var client = _client.CreateClient();
+            var form = new FormLinkShorten(UrlLink);
+            var formAsJson = JsonConvert.SerializeObject(form);
+            var response = await client.PostAsync(Route.BaseUrl + Route.ApiV1Route + Route.ShortenLinkRoute,
+                new StringContent(formAsJson, Encoding.UTF8,
+                    Common.JsonMediaType));
+
+            if (response.StatusCode == HttpStatusCode.Created) {
+                var shortenedLink = response.Content.ReadFromJsonAsync<FormLinkShorten>();
+                var parameters = new DialogParameters();
+                parameters.Add("UrlLink", shortenedLink.Result.link);
+                DialogService.Show<UrlShortenedDialog>("Your shortened URL link is ready to share! " +
+                                                       "Store it safely as it won't be shown again.", parameters, maxWidth);
+            }
+            else {
+                Snackbar.Add("The link could not be shortened!", Severity.Error);
+            }
         }
     }
-
 }
