@@ -55,7 +55,7 @@ public class LinkShortenerController {
                 String redirectUrlCheckStr = mapDb.find(tx, urlShortened);
                 if (redirectUrlCheckStr == "" || redirectUrlCheckStr == null) {
                     mapDb.save(tx, urlShortened, redirectLink);
-                    log.info("MabsDbApi.save");
+                    log.info("MapDbApi.save");
 
                     LinkShortenForm response = new LinkShortenForm();
                     response.link = urlShortened;
@@ -75,7 +75,7 @@ public class LinkShortenerController {
 
     @PostMapping(value = "/redirect-url", consumes = "application/json", produces = "application/json")
     public ResponseEntity<byte[]> redirectUrlLink(@RequestBody String linkShortenForm) {
-        log.info("MabsDbApi.find");
+        log.info("MapDbApi.find");
 
         DB tx = mapDb.beginTransaction();
 
