@@ -21,3 +21,5 @@ In browser, go to `localhost:9000` to see the UI of the running application whic
 
 ## Demo
 https://linklo.fredericodes.online
+
+[Watch the video]([https://www.youtube.com/watch?v=<video-id>](https://fredericodes.github.io/Demo/Linklo.webm))
