@@ -1,0 +1,58 @@
+name: Deploy to Linode
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Linode
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LINODE_IP }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Navigate to the app directory
+            APP_DIR="/root/linklo"
+            if [ -d "$APP_DIR/.git" ]; then
+              echo "Repository exists. Pulling latest changes..."
+              cd "$APP_DIR"
+              git fetch --all
+              git reset --hard origin/master
+              git pull https://github.com/fredericodes/linklo.git master
+            else
+              echo "Repository does not exist. Cloning repository..."
+              git clone https://github.com/fredericodes/linklo.git
+              cd "$APP_DIR"
+            fi
+            
+            # Update BaseUrl in Route.cs using perl
+            API_DOMAIN=${{ secrets.API_DOMAIN }}
+            perl -pi -e "s|http://localhost:9001|https://${API_DOMAIN}|g" "$APP_DIR/ui/Api/Route.cs"
+
+            # Update cors origin urls in LinkShortenerController.java
+            CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}
+            perl -pi -e "s|@CrossOrigin\\(origins = \\\"http://localhost:9000\\\"\\)|@CrossOrigin(origins = \\\"https://$CORS_ORIGIN\\\")|g" "$APP_DIR/api/src/main/java/link/shortener/api/LinkShortenerController.java"
+
+            # Debug: Print the updated LinkShortenerController.java file
+            echo "Updated LinkShortenerController file:"
+            cat "$APP_DIR/api/src/main/java/link/shortener/api/LinkShortenerController.java"
+
+            # Debug: Print the updated Route.cs file
+            echo "Updated Route.cs file:"
+            cat "$APP_DIR/ui/Api/Route.cs"
+
+            # Stop and remove existing containers
+            cd "$APP_DIR"
+            docker-compose down
+
+            # Build and start the services
+            docker-compose up -d --build
+
+            # Clean up unused Docker resources
+            docker system prune -a --volumes -f
